@@ -1,15 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Jacobabs Car Racing</title>
 
 <style>
-* {
-    box-sizing: border-box;
-}
-
 body {
     margin: 0;
     background: #111;
@@ -19,32 +15,31 @@ body {
 }
 
 h1 {
-    margin: 12px 0 4px;
-    font-size: 27px;
+    margin: 15px 0 5px;
 }
 
 #score {
-    font-size: 20px;
-    margin: 8px;
+    font-size: 22px;
+    margin: 10px;
 }
 
 #game {
     position: relative;
-    width: 330px;
-    height: 520px;
+    width: 320px;
+    height: 500px;
     margin: auto;
     overflow: hidden;
     background: #555;
-    border-left: 7px solid white;
-    border-right: 7px solid white;
+    border-left: 8px solid white;
+    border-right: 8px solid white;
 }
 
 .grass {
     position: absolute;
     top: 0;
-    width: 38px;
+    width: 35px;
     height: 100%;
-    background: #218c45;
+    background: #16833c;
 }
 
 #grassLeft {
@@ -57,8 +52,8 @@ h1 {
 
 .road {
     position: absolute;
-    left: 38px;
-    right: 38px;
+    left: 35px;
+    right: 35px;
     top: 0;
     bottom: 0;
     background: #555;
@@ -67,48 +62,48 @@ h1 {
 .line {
     position: absolute;
     width: 7px;
-    height: 75px;
+    height: 70px;
     background: white;
-    left: 161px;
+    left: 156px;
 }
 
 .car {
     position: absolute;
-    width: 52px;
-    height: 84px;
+    width: 50px;
+    height: 80px;
     border: 3px solid #111;
-    border-radius: 13px;
-    z-index: 5;
+    border-radius: 12px;
+}
+
+#player {
+    left: 135px;
+    bottom: 25px;
+    background: red;
+}
+
+#enemy {
+    left: 100px;
+    top: -100px;
+    background: blue;
 }
 
 .car::before {
     content: "";
     position: absolute;
     left: 7px;
-    top: 9px;
-    width: 32px;
-    height: 26px;
+    top: 8px;
+    width: 31px;
+    height: 25px;
     background: #9ee7f5;
     border: 2px solid #222;
-    border-radius: 7px;
-}
-
-.player {
-    background: #e53935;
-    bottom: 25px;
-    left: 139px;
-}
-
-.enemy {
-    background: #1976d2;
-    top: -100px;
+    border-radius: 6px;
 }
 
 .wheel {
     position: absolute;
     width: 8px;
-    height: 21px;
-    background: #111;
+    height: 20px;
+    background: black;
     border-radius: 4px;
 }
 
@@ -133,35 +128,30 @@ h1 {
 }
 
 #startButton {
-    margin-top: 12px;
-    padding: 14px 28px;
-    border: 0;
-    border-radius: 10px;
-    background: #16a34a;
+    margin: 15px;
+    padding: 15px 30px;
+    background: green;
     color: white;
-    font-size: 19px;
+    border: none;
+    border-radius: 10px;
+    font-size: 20px;
     font-weight: bold;
 }
 
-.controls {
-    margin-top: 12px;
-}
-
-.controlButton {
-    width: 85px;
-    height: 58px;
-    margin: 0 10px;
-    border: 0;
-    border-radius: 10px;
+.control {
+    width: 80px;
+    height: 55px;
+    margin: 5px;
     background: #333;
     color: white;
-    font-size: 28px;
+    border: none;
+    border-radius: 10px;
+    font-size: 25px;
 }
 
 #message {
-    margin: 10px;
-    font-size: 18px;
     min-height: 25px;
+    margin: 8px;
 }
 </style>
 </head>
@@ -183,14 +173,14 @@ h1 {
     <div class="line" id="line3" style="top:280px"></div>
     <div class="line" id="line4" style="top:420px"></div>
 
-    <div id="player" class="car player">
+    <div id="player" class="car">
         <span class="wheel w1"></span>
         <span class="wheel w2"></span>
         <span class="wheel w3"></span>
         <span class="wheel w4"></span>
     </div>
 
-    <div id="enemy" class="car enemy">
+    <div id="enemy" class="car">
         <span class="wheel w1"></span>
         <span class="wheel w2"></span>
         <span class="wheel w3"></span>
@@ -201,29 +191,24 @@ h1 {
 
 <div id="message">Press START GAME to begin</div>
 
-<button id="startButton">START GAME</button>
+<button type="button" id="startButton">START GAME</button>
 
-<div class="controls">
-    <button class="controlButton" id="leftButton">⬅️</button>
-    <button class="controlButton" id="rightButton">➡️</button>
+<div>
+    <button type="button" class="control" id="leftButton">⬅️</button>
+    <button type="button" class="control" id="rightButton">➡️</button>
 </div>
 
 <script>
 var player = document.getElementById("player");
 var enemy = document.getElementById("enemy");
+var startButton = document.getElementById("startButton");
 var scoreText = document.getElementById("score");
 var message = document.getElementById("message");
-var startButton = document.getElementById("startButton");
 
-var lines = [
-    document.getElementById("line1"),
-    document.getElementById("line2"),
-    document.getElementById("line3"),
-    document.getElementById("line4")
-];
+var lines = document.querySelectorAll(".line");
 
-var playerX = 139;
-var enemyX = 80;
+var playerX = 135;
+var enemyX = 100;
 var enemyY = -100;
 var score = 0;
 var speed = 5;
@@ -231,24 +216,28 @@ var playing = false;
 var animation = null;
 
 function moveLeft() {
-    if (!playing) return;
+    if (!playing) {
+        return;
+    }
 
     playerX = playerX - 25;
 
-    if (playerX < 45) {
-        playerX = 45;
+    if (playerX < 40) {
+        playerX = 40;
     }
 
     player.style.left = playerX + "px";
 }
 
 function moveRight() {
-    if (!playing) return;
+    if (!playing) {
+        return;
+    }
 
     playerX = playerX + 25;
 
-    if (playerX > 235) {
-        playerX = 235;
+    if (playerX > 230) {
+        playerX = 230;
     }
 
     player.style.left = playerX + "px";
@@ -256,17 +245,14 @@ function moveRight() {
 
 function startGame() {
 
-    if (animation) {
-        cancelAnimationFrame(animation);
-    }
-
-    playerX = 139;
-    enemyX = 50 + Math.floor(Math.random() * 190);
-    enemyY = -100;
+    playing = true;
 
     score = 0;
     speed = 5;
-    playing = true;
+
+    playerX = 135;
+    enemyY = -100;
+    enemyX = 50 + Math.floor(Math.random() * 180);
 
     player.style.left = playerX + "px";
     enemy.style.left = enemyX + "px";
@@ -277,7 +263,11 @@ function startGame() {
 
     startButton.innerHTML = "RESTART GAME";
 
-    animation = requestAnimationFrame(gameLoop);
+    if (animation !== null) {
+        cancelAnimationFrame(animation);
+    }
+
+    gameLoop();
 }
 
 function gameLoop() {
@@ -287,29 +277,32 @@ function gameLoop() {
     }
 
     enemyY = enemyY + speed;
+
     enemy.style.top = enemyY + "px";
 
     for (var i = 0; i < lines.length; i++) {
 
-        var lineTop = parseInt(lines[i].style.top);
+        var currentTop = parseInt(lines[i].style.top);
 
-        lineTop = lineTop + speed;
+        currentTop = currentTop + speed;
 
-        if (lineTop > 520) {
-            lineTop = -75;
+        if (currentTop > 500) {
+            currentTop = -70;
         }
 
-        lines[i].style.top = lineTop + "px";
+        lines[i].style.top = currentTop + "px";
     }
 
-    if (enemyY > 520) {
+    if (enemyY > 500) {
 
         enemyY = -100;
-        enemyX = 50 + Math.floor(Math.random() * 190);
+
+        enemyX = 50 + Math.floor(Math.random() * 180);
 
         enemy.style.left = enemyX + "px";
 
         score = score + 1;
+
         scoreText.innerHTML = "Score: " + score;
 
         if (score % 5 === 0) {
@@ -320,13 +313,12 @@ function gameLoop() {
     var playerBox = player.getBoundingClientRect();
     var enemyBox = enemy.getBoundingClientRect();
 
-    var crash =
+    if (
         playerBox.left < enemyBox.right &&
         playerBox.right > enemyBox.left &&
         playerBox.top < enemyBox.bottom &&
-        playerBox.bottom > enemyBox.top;
-
-    if (crash) {
+        playerBox.bottom > enemyBox.top
+    ) {
 
         playing = false;
 
@@ -341,11 +333,19 @@ function gameLoop() {
     animation = requestAnimationFrame(gameLoop);
 }
 
-startButton.addEventListener("click", startGame);
-document.getElementById("leftButton").addEventListener("click", moveLeft);
-document.getElementById("rightButton").addEventListener("click", moveRight);
+startButton.onclick = function() {
+    startGame();
+};
 
-document.addEventListener("keydown", function(event) {
+document.getElementById("leftButton").onclick = function() {
+    moveLeft();
+};
+
+document.getElementById("rightButton").onclick = function() {
+    moveRight();
+};
+
+document.onkeydown = function(event) {
 
     if (event.key === "ArrowLeft") {
         moveLeft();
@@ -354,7 +354,7 @@ document.addEventListener("keydown", function(event) {
     if (event.key === "ArrowRight") {
         moveRight();
     }
-});
+};
 
 message.innerHTML = "Press START GAME to begin";
 </script>
