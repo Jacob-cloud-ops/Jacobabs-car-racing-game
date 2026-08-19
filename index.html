@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jacobabs Car Racing</title>
+
+    <style>
+        body {
+            margin: 0;
+            background: #222;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            color: white;
+        }
+
+        h1 {
+            margin: 15px 0 5px;
+        }
+
+        #score {
+            font-size: 22px;
+            margin: 10px;
+        }
+
+        #game {
+            position: relative;
+            width: 320px;
+            height: 500px;
+            margin: auto;
+            overflow: hidden;
+            background: #555;
+            border-left: 8px solid white;
+            border-right: 8px solid white;
+        }
+
+        .road-line {
+            position: absolute;
+            width: 8px;
+            height: 80px;
+            background: white;
+            left: 156px;
+        }
+
+        #car {
+            position: absolute;
+            width: 45px;
+            height: 75px;
+            background: red;
+            bottom: 20px;
+            left: 137px;
+            border-radius: 8px;
+        }
+
+        .enemy {
+            position: absolute;
+            width: 45px;
+            height: 75px;
+            background: yellow;
+            border-radius: 8px;
+            top: -100px;
+        }
+
+        button {
+            margin: 12px 5px;
+            padding: 12px 20px;
+            font-size: 18px;
+            border: none;
+            border-radius: 8px;
+        }
+
+        #start {
+            background: green;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>🏎️ Jacobabs Car Racing</h1>
+
+<div id="score">Score: 0</div>
+
+<div id="game">
+    <div class="road-line" style="top: 0;"></div>
+    <div class="road-line" style="top: 150px;"></div>
+    <div class="road-line" style="top: 300px;"></div>
+
+    <div id="car"></div>
+    <div id="enemy" class="enemy"></div>
+</div>
+
+<button id="start">START GAME</button>
+
+<script>
+    const car = document.getElementById("car");
+    const enemy = document.getElementById("enemy");
+    const scoreText = document.getElementById("score");
+    const startButton = document.getElementById("start");
+
+    let carLeft = 137;
+    let enemyTop = -100;
+    let enemyLeft = 50;
+    let score = 0;
+    let speed = 5;
+    let gameRunning = false;
+
+    function moveCar(direction) {
+        if (!gameRunning) return;
+
+        if (direction === "left" && carLeft > 5) {
+            carLeft -= 25;
+        }
+
+        if (direction === "right" && carLeft < 270) {
+            carLeft += 25;
+        }
+
+        car.style.left = carLeft + "px";
+    }
+
+    document.addEventListener("keydown", function(event) {
+        if (event.key === "ArrowLeft") moveCar("left");
+        if (event.key === "ArrowRight") moveCar("right");
+    });
+
+    document.addEventListener("touchstart", function(event) {
+        if (!gameRunning) return;
+
+        const touchX = event.touches[0].clientX;
+        const screenCenter = window.innerWidth / 2;
+
+        if (touchX < screenCenter) {
+            moveCar("left");
+        } else {
+            moveCar("right");
+        }
+    });
+
+    function startGame() {
+        carLeft = 137;
+        enemyTop = -100;
+        enemyLeft = Math.floor(Math.random() * 270);
+        score = 0;
+        speed = 5;
+        gameRunning = true;
+
+        car.style.left = carLeft + "px";
+        enemy.style.left = enemyLeft + "px";
+        startButton.innerText = "RESTART GAME";
+
+        gameLoop();
+    }
+
+    function gameLoop() {
+        if (!gameRunning) return;
+
+        enemyTop += speed;
+        enemy.style.top = enemyTop + "px";
+
+        if (enemyTop > 500) {
+            enemyTop = -100;
+            enemyLeft = Math.floor(Math.random() * 270);
+            enemy.style.left = enemyLeft + "px";
+
+            score++;
+            scoreText.innerText = "Score: " + score;
+
+            if (score % 5 === 0) {
+                speed++;
+            }
+        }
+
+        const carRect = car.getBoundingClientRect();
+        const enemyRect = enemy.getBoundingClientRect();
+
+        if (
+            carRect.left < enemyRect.right &&
+            carRect.right > enemyRect.left &&
+            carRect.top < enemyRect.bottom &&
+            carRect.bottom > enemyRect.top
+        ) {
+            gameRunning = false;
+            alert("Game Over! Your score: " + score);
+        }
+
+        requestAnimationFrame(gameLoop);
+    }
+
+    startButton.addEventListener("click", startGame);
+</script>
+
+</body>
+</html>
