@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,166 +8,279 @@
 <style>
 * {
     box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
 }
 
 body {
     margin: 0;
-    background: #111;
-    font-family: Arial, sans-serif;
+    background: #101010;
     color: white;
+    font-family: Arial, sans-serif;
     text-align: center;
+    overflow-x: hidden;
 }
 
 h1 {
-    margin: 12px 0 4px;
-    font-size: 28px;
+    margin: 12px 0 2px;
+    font-size: 27px;
 }
 
-#score {
-    font-size: 20px;
-    margin: 8px;
+.subtitle {
+    color: #bbb;
+    margin-bottom: 8px;
+}
+
+#scoreBox {
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    margin: 8px 0;
+    font-size: 18px;
+    font-weight: bold;
 }
 
 #game {
     position: relative;
-    width: 330px;
-    height: 520px;
+    width: 340px;
+    height: 540px;
     margin: auto;
     overflow: hidden;
     background: #555;
-    border-left: 7px solid white;
-    border-right: 7px solid white;
+    border-left: 8px solid white;
+    border-right: 8px solid white;
+    box-shadow: 0 0 20px rgba(255,255,255,.15);
 }
-
-/* Road markings */
-.line {
-    position: absolute;
-    width: 8px;
-    height: 70px;
-    background: white;
-    left: 161px;
-}
-
-#l1 { top: 0; }
-#l2 { top: 140px; }
-#l3 { top: 280px; }
-#l4 { top: 420px; }
 
 /* Grass */
 .grass {
     position: absolute;
-    width: 35px;
-    height: 100%;
-    background: #238b45;
     top: 0;
+    width: 40px;
+    height: 100%;
+    background: #218c45;
+    z-index: 0;
 }
 
-#grass1 {
+#grassLeft {
     left: 0;
 }
 
-#grass2 {
+#grassRight {
     right: 0;
 }
 
-/* Player car */
+/* Road */
+.road {
+    position: absolute;
+    left: 40px;
+    right: 40px;
+    top: 0;
+    bottom: 0;
+    background: #505050;
+}
+
+/* Lane lines */
+.laneLine {
+    position: absolute;
+    width: 7px;
+    height: 80px;
+    background: white;
+    left: 166px;
+    z-index: 1;
+}
+
+/* Roadside trees */
+.tree {
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    background: #126b31;
+    border-radius: 50%;
+    z-index: 2;
+}
+
+.tree::after {
+    content: "";
+    position: absolute;
+    width: 8px;
+    height: 18px;
+    background: #704214;
+    left: 8px;
+    top: 18px;
+}
+
+/* Cars */
 .car {
     position: absolute;
     width: 52px;
-    height: 82px;
-    bottom: 25px;
-    left: 139px;
-    background: #e53935;
-    border-radius: 12px 12px 7px 7px;
+    height: 84px;
     border: 3px solid #111;
-    z-index: 5;
+    border-radius: 13px 13px 8px 8px;
+    z-index: 6;
 }
 
-/* Windows */
+/* Player */
+#player {
+    left: 144px;
+    bottom: 28px;
+    background: #e53935;
+}
+
+/* Car windows */
 .car::before {
     content: "";
     position: absolute;
-    width: 34px;
-    height: 25px;
-    left: 6px;
+    left: 7px;
     top: 9px;
-    background: #80deea;
-    border-radius: 6px;
+    width: 32px;
+    height: 27px;
+    background: #9ee7f5;
     border: 2px solid #222;
+    border-radius: 7px;
+}
+
+/* Car stripe */
+.car::after {
+    content: "";
+    position: absolute;
+    left: 21px;
+    top: 39px;
+    width: 7px;
+    height: 37px;
+    background: rgba(255,255,255,.45);
+    border-radius: 4px;
 }
 
 /* Wheels */
 .wheel {
     position: absolute;
-    width: 8px;
+    width: 9px;
     height: 22px;
     background: #111;
-    border-radius: 4px;
+    border-radius: 5px;
 }
 
 .w1 {
     left: -7px;
-    top: 13px;
+    top: 15px;
 }
 
 .w2 {
     right: -7px;
-    top: 13px;
+    top: 15px;
 }
 
 .w3 {
     left: -7px;
-    bottom: 13px;
+    bottom: 15px;
 }
 
 .w4 {
     right: -7px;
-    bottom: 13px;
+    bottom: 15px;
 }
 
-/* Enemy car */
-.enemy {
-    position: absolute;
-    width: 52px;
-    height: 82px;
-    top: -100px;
+/* Enemy colors */
+.enemy1 {
     background: #1976d2;
-    border-radius: 12px 12px 7px 7px;
-    border: 3px solid #111;
-    z-index: 4;
 }
 
-.enemy::before {
-    content: "";
+.enemy2 {
+    background: #fbc02d;
+}
+
+.enemy3 {
+    background: #8e24aa;
+}
+
+/* Coins */
+.coin {
     position: absolute;
-    width: 34px;
-    height: 25px;
-    left: 6px;
-    top: 9px;
-    background: #b3e5fc;
-    border-radius: 6px;
-    border: 2px solid #222;
+    width: 27px;
+    height: 27px;
+    border-radius: 50%;
+    background: #ffd700;
+    border: 3px solid #fff08a;
+    z-index: 5;
+    box-shadow: 0 0 10px #ffd700;
 }
 
-button {
-    margin: 12px 5px;
-    padding: 13px 22px;
-    font-size: 17px;
+.coin::after {
+    content: "$";
+    color: #9a6900;
+    font-size: 15px;
     font-weight: bold;
-    border: none;
-    border-radius: 9px;
+    line-height: 21px;
 }
 
-#start {
+/* Overlay */
+#overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,.72);
+    z-index: 20;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+#overlay h2 {
+    font-size: 34px;
+    margin: 5px;
+}
+
+#overlay p {
+    font-size: 18px;
+    line-height: 1.5;
+}
+
+#startButton,
+#restartButton {
+    padding: 15px 30px;
+    border: none;
+    border-radius: 10px;
     background: #16a34a;
     color: white;
+    font-size: 19px;
+    font-weight: bold;
 }
 
-.controls button {
-    background: #333;
+#restartButton {
+    display: none;
+}
+
+/* Controls */
+.controls {
+    margin: 12px auto;
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+}
+
+.controlButton {
+    width: 90px;
+    height: 60px;
+    border: none;
+    border-radius: 12px;
+    background: #303030;
     color: white;
-    font-size: 25px;
-    width: 75px;
+    font-size: 30px;
+    font-weight: bold;
+    box-shadow: 0 4px 0 #111;
+}
+
+.controlButton:active {
+    transform: translateY(3px);
+    box-shadow: 0 1px 0 #111;
+}
+
+#instructions {
+    color: #aaa;
+    font-size: 14px;
+    margin: 5px auto 15px;
+    max-width: 340px;
 }
 </style>
 </head>
@@ -175,164 +288,105 @@ button {
 <body>
 
 <h1>🏎️ Jacobabs Car Racing</h1>
+<div class="subtitle">Highway Challenge</div>
 
-<div id="score">Score: 0</div>
+<div id="scoreBox">
+    <div>🏆 Score: <span id="score">0</span></div>
+    <div>⭐ Best: <span id="best">0</span></div>
+</div>
 
 <div id="game">
 
-    <div class="grass" id="grass1"></div>
-    <div class="grass" id="grass2"></div>
+    <div class="grass" id="grassLeft"></div>
+    <div class="grass" id="grassRight"></div>
+    <div class="road"></div>
 
-    <div class="line" id="l1"></div>
-    <div class="line" id="l2"></div>
-    <div class="line" id="l3"></div>
-    <div class="line" id="l4"></div>
+    <div class="laneLine" id="line1"></div>
+    <div class="laneLine" id="line2"></div>
+    <div class="laneLine" id="line3"></div>
+    <div class="laneLine" id="line4"></div>
+    <div class="laneLine" id="line5"></div>
 
-    <div id="car" class="car">
-        <div class="wheel w1"></div>
-        <div class="wheel w2"></div>
-        <div class="wheel w3"></div>
-        <div class="wheel w4"></div>
+    <div class="tree" id="tree1"></div>
+    <div class="tree" id="tree2"></div>
+    <div class="tree" id="tree3"></div>
+    <div class="tree" id="tree4"></div>
+
+    <div id="player" class="car">
+        <span class="wheel w1"></span>
+        <span class="wheel w2"></span>
+        <span class="wheel w3"></span>
+        <span class="wheel w4"></span>
     </div>
 
-    <div id="enemy" class="enemy"></div>
+    <div id="enemy1" class="car enemy1">
+        <span class="wheel w1"></span>
+        <span class="wheel w2"></span>
+        <span class="wheel w3"></span>
+        <span class="wheel w4"></span>
+    </div>
+
+    <div id="enemy2" class="car enemy2">
+        <span class="wheel w1"></span>
+        <span class="wheel w2"></span>
+        <span class="wheel w3"></span>
+        <span class="wheel w4"></span>
+    </div>
+
+    <div id="enemy3" class="car enemy3">
+        <span class="wheel w1"></span>
+        <span class="wheel w2"></span>
+        <span class="wheel w3"></span>
+        <span class="wheel w4"></span>
+    </div>
+
+    <div id="coin" class="coin"></div>
+
+    <div id="overlay">
+        <h2 id="overlayTitle">🏁 Jacobabs Racing</h2>
+        <p id="overlayText">
+            Avoid the cars.<br>
+            Collect coins.<br>
+            Beat your high score!
+        </p>
+
+        <button id="startButton">START GAME</button>
+        <button id="restartButton">PLAY AGAIN</button>
+    </div>
 
 </div>
 
 <div class="controls">
-    <button id="left">⬅️</button>
-    <button id="right">➡️</button>
+    <button class="controlButton" id="leftButton">⬅️</button>
+    <button class="controlButton" id="rightButton">➡️</button>
 </div>
 
-<button id="start">START GAME</button>
+<div id="instructions">
+    Use the buttons or swipe left/right to move your car.
+</div>
 
 <script>
-const car = document.getElementById("car");
-const enemy = document.getElementById("enemy");
-const scoreText = document.getElementById("score");
-const startButton = document.getElementById("start");
 
-const lines = [
-    document.getElementById("l1"),
-    document.getElementById("l2"),
-    document.getElementById("l3"),
-    document.getElementById("l4")
+const game = document.getElementById("game");
+const player = document.getElementById("player");
+
+const enemies = [
+    document.getElementById("enemy1"),
+    document.getElementById("enemy2"),
+    document.getElementById("enemy3")
 ];
 
-let carLeft = 139;
-let enemyTop = -100;
-let enemyLeft = 80;
-let score = 0;
-let speed = 5;
-let gameRunning = false;
+const coin = document.getElementById("coin");
 
-function moveLeft() {
-    if (!gameRunning) return;
+const scoreDisplay = document.getElementById("score");
+const bestDisplay = document.getElementById("best");
 
-    if (carLeft > 42) {
-        carLeft -= 25;
-        car.style.left = carLeft + "px";
-    }
-}
+const overlay = document.getElementById("overlay");
+const overlayTitle = document.getElementById("overlayTitle");
+const overlayText = document.getElementById("overlayText");
 
-function moveRight() {
-    if (!gameRunning) return;
+const startButton = document.getElementById("startButton");
+const restartButton = document.getElementById("restartButton");
 
-    if (carLeft < 236) {
-        carLeft += 25;
-        car.style.left = carLeft + "px";
-    }
-}
-
-document.getElementById("left").addEventListener("click", moveLeft);
-document.getElementById("right").addEventListener("click", moveRight);
-
-document.addEventListener("keydown", function(event) {
-    if (event.key === "ArrowLeft") moveLeft();
-    if (event.key === "ArrowRight") moveRight();
-});
-
-function startGame() {
-
-    carLeft = 139;
-    enemyTop = -100;
-    enemyLeft = 50 + Math.floor(Math.random() * 190);
-
-    score = 0;
-    speed = 5;
-    gameRunning = true;
-
-    car.style.left = carLeft + "px";
-    enemy.style.left = enemyLeft + "px";
-    enemy.style.top = enemyTop + "px";
-
-    scoreText.innerText = "Score: 0";
-    startButton.innerText = "RESTART GAME";
-
-    gameLoop();
-}
-
-function gameLoop() {
-
-    if (!gameRunning) return;
-
-    /* Move enemy */
-    enemyTop += speed;
-    enemy.style.top = enemyTop + "px";
-
-    /* Move road lines */
-    lines.forEach(function(line) {
-
-        let top = parseInt(line.style.top || getComputedStyle(line).top);
-
-        top += speed;
-
-        if (top > 520) {
-            top = -70;
-        }
-
-        line.style.top = top + "px";
-    });
-
-    /* Enemy passed */
-    if (enemyTop > 520) {
-
-        enemyTop = -100;
-        enemyLeft = 50 + Math.floor(Math.random() * 190);
-
-        enemy.style.left = enemyLeft + "px";
-
-        score++;
-        scoreText.innerText = "Score: " + score;
-
-        if (score % 5 === 0) {
-            speed += 0.7;
-        }
-    }
-
-    /* Collision */
-    const carRect = car.getBoundingClientRect();
-    const enemyRect = enemy.getBoundingClientRect();
-
-    if (
-        carRect.left < enemyRect.right &&
-        carRect.right > enemyRect.left &&
-        carRect.top < enemyRect.bottom &&
-        carRect.bottom > enemyRect.top
-    ) {
-
-        gameRunning = false;
-
-        alert(
-            "🏁 GAME OVER!\n\nYour score: " + score
-        );
-    }
-
-    requestAnimationFrame(gameLoop);
-}
-
-startButton.addEventListener("click", startGame);
-</script>
-
-</body>
-</html>
+const lines = [
+    document.getElement
